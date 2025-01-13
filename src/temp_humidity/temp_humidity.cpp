@@ -25,7 +25,7 @@ void loopDHT(){
         strcpy(humidityTemp, "Failed");         
     }
     else{
-        // Computes temperature values in Celsius + Fahrenheit and Humidity
+        // Computes temperature values in Celsius and Humidity
         float hic = dht.computeHeatIndex(t, h, false);       
         dtostrf(hic, 6, 2, celsiusTemp);                     
         dtostrf(h, 6, 2, humidityTemp);
