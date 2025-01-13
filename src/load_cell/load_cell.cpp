@@ -42,3 +42,35 @@ void loopScale(){
     scale.power_up();
 }
 
+void calibrateSetup(){
+    scale.begin(LOADCELL_DOUT_PIN,LOADCELL_SCK_PIN);
+}
+
+void calibrateLoop(){
+if(scale.is_ready()){
+
+    // Call set_scale() with no parameter
+    scale.set_scale();
+
+    Serial.println("Tare... remove any weights from scale.");
+    delay(5000);
+
+    // Call tare() with no parameter.
+    scale.tare();
+    Serial.println("Tare done...");
+    Serial.print("Place a known weight on the scale...");
+    delay(5000);
+
+    //Place a known weight on the scale and call get_units(10)
+    long reading = scale.get_units(10);
+    Serial.print("Result: ");
+    Serial.println(reading);
+
+    //Divide the result in step 3 to your known weight. You should get about the parameter you need to pass to set_scale()
+  }
+
+  else{
+    Serial.println("HX711 not found.");
+  }
+  delay(1000);
+}
