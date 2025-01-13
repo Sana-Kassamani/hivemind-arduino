@@ -1,18 +1,30 @@
+// temp code
 #include <Arduino.h>
+#include "wifi/wifi.h"
+#include "temp_humidity/temp_humidity.h"
+#include "load_cell/load_cell.h"
 
-// put function declarations here:
-int myFunction(int, int);
 
+// only runs on boot
 void setup() {
-  // put your setup code here, to run once:
-  int result = myFunction(2, 3);
+
+  Serial.begin(115200);
+  delay(100);
+  setupWifi();
+  setupDHT();
+  setupScale();
+  // calibrateSetup();
 }
+
+
+// runs over and over again
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
+  // calibrateLoop();
+  loopDHT();
+  loopScale();
+  delay(3000);
 }
 
-// put function definitions here:
-int myFunction(int x, int y) {
-  return x + y;
-}
+
