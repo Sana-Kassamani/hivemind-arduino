@@ -39,3 +39,40 @@ void connectToWifi(){
   Serial.println(WiFi.localIP());
 }
 
+void sendRequest(){
+
+  //Send an HTTP POST request every 10 seconds
+  if ((millis() - lastTime) > timerDelay) {
+
+    //Check WiFi connection status
+    if(WiFi.status()== WL_CONNECTED){
+      WiFiClient client;
+      HTTPClient http;
+      
+      // Your Domain name with path
+      http.begin(client, serverName);
+  
+      // If you need Node-RED/server authentication, insert user and password below
+      //http.setAuthorization("REPLACE_WITH_SERVER_USERNAME", "REPLACE_WITH_SERVER_PASSWORD");
+  
+      // Specify content-type header
+      http.addHeader("Content-Type", "application/json");
+
+      // Data to send with HTTP POST
+      String httpRequestData = "{\"api_key\":\"tPmAT5Ab3j7F9\",\"sensor\":\"BME280\",\"value1\":\"24.25\",\"value2\":\"49.54\",\"value3\":\"1005.14\"}";           
+      // Send HTTP POST request
+      int httpResponseCode = http.POST(httpRequestData);
+
+      // receive http status code
+      Serial.print("HTTP Response code: ");
+      Serial.println(httpResponseCode);
+        
+      // Free resources
+      http.end();
+    }
+    else {
+      Serial.println("WiFi Disconnected");
+    }
+    lastTime = millis();
+  }
+}
