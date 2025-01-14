@@ -4,6 +4,6 @@
 // prototype of functions in .cpp file
 void connectToWifi();
 
-void sendRequest();
+void sendRequest(float , float, float );
 
 #endif
