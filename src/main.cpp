@@ -10,7 +10,7 @@ void setup() {
 
   Serial.begin(115200);
   delay(100);
-  setupWifi();
+  connectToWifi();
   setupDHT();
   setupScale();
   // calibrateSetup();
@@ -20,11 +20,13 @@ void setup() {
 // runs over and over again
 
 void loop() {
-
+  float humidity;
+  float temperature;
+  float mass;
   // calibrateLoop();
-  loopDHT();
-  loopScale();
-  delay(3000);
+  loopDHT(temperature, humidity);
+  loopScale(mass);
+  sendRequest(temperature, humidity, mass);
 }
 
 
