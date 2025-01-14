@@ -3,6 +3,6 @@
 
 // prototype of functions in .cpp file
 void setupDHT();
-void loopDHT();
+void loopDHT(float &, float &);
 
 #endif

@@ -13,10 +13,11 @@ void setupDHT(){
  dht.begin();
 }
 
-void loopDHT(){
-    float h = dht.readHumidity();
-        // read tempeerature in Celcius
-    float t = dht.readTemperature();
+void loopDHT(float &t, float &h){
+    // read humidity 
+    h = dht.readHumidity();
+    // read temperature in Celcius
+    t = dht.readTemperature();
 
     // Check if any reads failed and exit early (to try again).
     if (isnan(h) || isnan(t) ) {
