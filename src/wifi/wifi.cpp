@@ -9,11 +9,20 @@
 const char* ssid = "Tenda_DE7A90";
 const char* password = "170180190200";
 
-const char* serverName = "http://192.168.0.100:8080/hive-details/iot";
-
+const char* serverName = "http://192.168.0.100:8080/";
+const char* iotPath ="hive-details/iot";
+const char* alertPath = "hive-details/alert";
 // storing times
 unsigned long lastTime = 0;
-unsigned long timerDelay = 10000;
+unsigned long lastAlertTime =0;
+unsigned long timerDelay = 20000;
+unsigned long alertDelay = 60000;
+
+float minTemp = 20.0;
+float maxTemp = 30.0;
+float minHumidity = 40.0;
+float maxHumidity = 70.0;
+
 
 WiFiServer server(80);
 
@@ -39,18 +48,19 @@ void connectToWifi(){
   Serial.println(WiFi.localIP());
 }
 
-void sendRequest(){
+bool inRange(float v,float v1, float v2){
+    return (v >= v1 && v <= v2);   
+}
 
-  //Send an HTTP POST request every 10 seconds
-  if ((millis() - lastTime) > timerDelay) {
-
+void httpRequest(String path,String data){
     //Check WiFi connection status
     if(WiFi.status()== WL_CONNECTED){
+
       WiFiClient client;
       HTTPClient http;
       
       // Your Domain name with path
-      http.begin(client, serverName);
+      http.begin(client, serverName+path);
   
       // If you need Node-RED/server authentication, insert user and password below
       //http.setAuthorization("REPLACE_WITH_SERVER_USERNAME", "REPLACE_WITH_SERVER_PASSWORD");
@@ -59,7 +69,7 @@ void sendRequest(){
       http.addHeader("Content-Type", "application/json");
 
       // Data to send with HTTP POST
-      String httpRequestData = "{\"api_key\":\"tPmAT5Ab3j7F9\",\"sensor\":\"BME280\",\"value1\":\"24.25\",\"value2\":\"49.54\",\"value3\":\"1005.14\"}";           
+      String httpRequestData = data;           
       // Send HTTP POST request
       int httpResponseCode = http.POST(httpRequestData);
 
@@ -71,8 +81,46 @@ void sendRequest(){
       http.end();
     }
     else {
-      Serial.println("WiFi Disconnected");
+    Serial.println("WiFi Disconnected");
     }
+}
+
+bool checkAbnormalValues(String &s, float t, float h){
+    s="";
+    if( inRange(t, minTemp, maxTemp) && inRange(h, minHumidity,maxHumidity))
+    {
+        return false;
+    }
+    if(t < minTemp){
+        s+="Low Temperature!";
+    }
+    else if( t > maxTemp){
+        s+="High Temperature!";
+    }
+
+    if(h < minHumidity){
+        s+="Low Humidity!";
+    }
+    else if( h > maxHumidity){
+        s+="High Humidity!";
+    }
+    return true;
+}
+
+void sendRequest(float t, float h, float m){
+    String message;
+    if(checkAbnormalValues(message, t, h)){
+        if( lastAlertTime == 0 || (millis()-lastAlertTime > alertDelay ))
+        {
+            httpRequest(String(alertPath),"{\"message\":\""+String(message)+"\",\"temperature\":\""+String(t)+"\",\"humidity\":\""+String(h)+"\",\"mass\":\""+String(m)+"\"}" );
+            lastAlertTime = millis();
+            lastTime = millis();
+        }
+    }
+    //Send an HTTP POST request every 10 seconds
+     if ((millis() - lastTime) > timerDelay) {
+    String data = "{\"temperature\":\""+String(t)+"\",\"humidity\":\""+String(h)+"\",\"mass\":\""+String(m)+"\"}";
+    httpRequest(String(iotPath), data);
     lastTime = millis();
-  }
+    }
 }
