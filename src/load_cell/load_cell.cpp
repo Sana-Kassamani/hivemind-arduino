@@ -30,12 +30,12 @@ void setupScale(){
   Serial.println(scale.read());
 
 }
-void loopScale(){
+void loopScale(float &mass){
 
     // get raw reading of scale
     Serial.print("on reading:\t");
     Serial.print(scale.get_units(), 1);
-
+    mass = scale.get_units();
     // put the ADC in sleep mode
     scale.power_down();
     delay(2000);

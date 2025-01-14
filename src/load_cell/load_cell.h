@@ -3,7 +3,7 @@
 
 // prototype of functions in .cpp file
 void setupScale();
-void loopScale();
+void loopScale(float &);
 void calibrateSetup();
 void calibrateLoop();
 
