@@ -27,6 +27,7 @@ void loop() {
   loopDHT(temperature, humidity);
   loopScale(mass);
   sendRequest(temperature, humidity, mass);
+  delay(5000);
 }
 
 

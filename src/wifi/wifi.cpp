@@ -6,22 +6,22 @@
 #include <WiFiClient.h>
 
 
-const char* ssid = "Tenda_DE7A90";
-const char* password = "170180190200";
+const char* ssid = "SE Factory";
+const char* password = "SE-F@tory1243%";
 
-const char* serverName = "http://192.168.0.100:8080/";
+const char* serverName = "http://192.168.44.175:8080/";
 const char* iotPath ="hive-details/iot";
 const char* alertPath = "hive-details/alert";
 // storing times
 unsigned long lastTime = 0;
 unsigned long lastAlertTime =0;
-unsigned long timerDelay = 20000;
-unsigned long alertDelay = 60000;
+unsigned long timerDelay = 30000;
+unsigned long alertDelay = 120000;
 
-float minTemp = 20.0;
+float minTemp = 10.0;
 float maxTemp = 30.0;
 float minHumidity = 40.0;
-float maxHumidity = 70.0;
+float maxHumidity = 65.0;
 
 
 WiFiServer server(80);
