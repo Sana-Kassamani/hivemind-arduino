@@ -19,7 +19,7 @@ void setupScale(){
   Serial.println(scale.read());
 
   // this value is obtained by calibrating the scale with known weights
-  scale.set_scale(388.63);  
+  scale.set_scale(389347);  
   
   // reset the scale to 0
   scale.tare();
