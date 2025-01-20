@@ -6,18 +6,21 @@
 #include <WiFiClient.h>
 
 
-const char* ssid = "SE Factory";
-const char* password = "SE-F@tory1243%";
+const char* ssid = "<Network-ssid>";
+const char* password = "<Network-pass>";
 
-const char* serverName = "http://192.168.44.175:8080/";
+const char* serverName = "http://<IP-Address-of-server>:<Port>/";
 const char* iotPath ="hive-details/iot";
 const char* alertPath = "hive-details/alert";
 // storing times
 unsigned long lastTime = 0;
 unsigned long lastAlertTime =0;
-unsigned long timerDelay = 30000;
-unsigned long alertDelay = 120000;
+// timer set for one day = 24 hrs
+unsigned long timerDelay = 86400;
+// alert set for every hour
+unsigned long alertDelay = 36000;
 
+// simulated min and max values for testing, to be replaced by actual temperature and humidity limits
 float minTemp = 10.0;
 float maxTemp = 30.0;
 float minHumidity = 40.0;
